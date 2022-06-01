@@ -5,12 +5,16 @@
       id="pantallaActividad"
       v-if="pantalla_actual == 'pantallaActividad'"
     >
-    <div class="tiempo_bar">
+    <!-- <div class="tiempo_bar">
          <div class="progress progresotime" id="bt">
            <div class="progress-bar" role="progressbar" v-bind:style="'width:'+llenado_bar+'%'" aria-valuemin="0" aria-valuemax="100"></div>
          </div>
+    </div> -->
+    <div class="pantalla_v" id="pantalla_v">
     </div>
-    <nivel1 @respuestasalumno="respuestasdadas" @tiemporespuestas="respuestatiempo" v-bind:plantilla_nombre="plantilla_actual" />
+    <div class="pantalla_r" id="pantalla_r">
+    </div>
+    <nivel1 class="trazos_pantalla" @respuestasalumno="respuestasdadas" @tiemporespuestas="respuestatiempo" v-bind:plantilla_nombre="plantilla_actual" />
     </div>
   </div>
 </template>
@@ -28,11 +32,11 @@ export default {
   },
   data: function () {
     return {
-      valorparar:null,
-      tiempo_mm: 1000/180000,
-      llenado_bar:0,
-      milisegundos:0,
-      segundos:0,
+      // valorparar:null,
+      // tiempo_mm: 1000/180000,
+      // llenado_bar:0,
+      // milisegundos:0,
+      // segundos:0,
       /**
        * La plantilla con la que inicial el ejercicio.
        * Almacenar en la instancia para evitar que se modifique durante la ejecucion.
@@ -100,7 +104,7 @@ export default {
     },
   },
   methods: {
-    respuestatiempo(valor){
+  respuestatiempo(valor){
 if(valor){
   document.getElementById('bt').style.display='block';
   this.iniciandoT();
@@ -114,11 +118,11 @@ if(valor){
       if(valor){
       this.iteracion_config.juego_respuestas_correctas+=1;
       this.iteracion_config.juego_respuestas_incorrectas+=0;
-      document.getElementById("pantallaActividad").style.backgroundColor='#3FE495CC';
+      document.getElementById("pantalla_v").style.display='block';
       }else{
       this.iteracion_config.juego_respuestas_correctas+=0;
       this.iteracion_config.juego_respuestas_incorrectas+=1;
-      document.getElementById("pantallaActividad").style.backgroundColor='#F6535DCC';
+      document.getElementById("pantalla_r").style.display='block';
       }
        console.log("gane o perdi:"+valor);
        this.responder();
@@ -168,7 +172,7 @@ if(valor){
       ) {
         return this.finEjercicio();
       }
-      this.armar_contenido();
+      // this.armar_contenido();
       this.pantalla_actual = "";
       return setTimeout(this.pantalla_actividad, 1000);
     },
@@ -201,32 +205,32 @@ if(valor){
     armar_contenido(){
       this.iniciando();
     },
-    iniciando(){ 
+  //   iniciando(){ 
       
-   this.valorparar = setInterval(
-   this.iniciar_tiempo,10);
-    },
-    iniciar_tiempo(){
+  //  this.valorparar = setInterval(
+  //  this.iniciar_tiempo,10);
+  //   },
+  //   iniciar_tiempo(){
     
-    this.milisegundos++;
+  //   this.milisegundos++;
 
-  //  console.log(this.llenado_bar);
-    if(this.milisegundos==100){
-      this.milisegundos=0;
-      this.segundos++;
-      // console.log(this.segundos)
-    }
-    if(this.segundos===181){
-        this.parar_tiempo();
-        this.respuestasdadas(false);
-         document.getElementById("pantallaActividad").style.backgroundColor='#F6535DCC';
+  // //  console.log(this.llenado_bar);
+  //   if(this.milisegundos==100){
+  //     this.milisegundos=0;
+  //     this.segundos++;
+  //     // console.log(this.segundos)
+  //   }
+  //   if(this.segundos===181){
+  //       this.parar_tiempo();
+  //       this.respuestasdadas(false);
+  //        document.getElementById("pantallaActividad").style.backgroundColor='#F6535DCC';
 
-    } 
-    this.llenado_bar=this.llenado_bar+ this.tiempo_responder_iteracion;        
-    },
-    parar_tiempo(){ 
-    clearInterval(this.valorparar);
-    },
+  //   } 
+  //   this.llenado_bar=this.llenado_bar+ this.tiempo_responder_iteracion;        
+  //   },
+  //   parar_tiempo(){ 
+  //   clearInterval(this.valorparar);
+  //   },
   },
   mounted: function () {
     jQuery(document).ready(() => {
@@ -254,20 +258,41 @@ if(valor){
     display: block;
   }
 }
-  .tiempo_bar{
-    display: flex;
-    justify-content: center;
-  }
-  .progresotime{
-    // margin-left: calc(50% - 25%);
-    margin: 5px auto;
-    margin-top:10px ;
-    width: 78%;
-    height: 14px;
-     border-radius: 20px;
-     background: #ffd6ad;; 
-  }
-  .progress-bar{
-  background-color:orange;
-  }
+.trazos_pantalla{
+  position: relative;
+}
+.pantalla_v{
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  margin: 0 auto;
+  background-color: #3FE495CC;
+  width: 95%;
+  height: 90%;
+}
+.pantalla_r{
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  margin: 0 auto;
+  background-color: #F6535DCC;
+  width: 95%;
+  height: 90%;
+}
+  // .tiempo_bar{
+  //   display: flex;
+  //   justify-content: center;
+  // }
+  // .progresotime{
+  //   // margin-left: calc(50% - 25%);
+  //   margin: 5px auto;
+  //   margin-top:10px ;
+  //   width: 78%;
+  //   height: 14px;
+  //    border-radius: 20px;
+  //    background: #ffd6ad;; 
+  // }
+  // .progress-bar{
+  // background-color:orange;
+  // }
 </style>
